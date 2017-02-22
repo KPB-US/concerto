@@ -95,6 +95,29 @@ namespace :deploy do
     end
   end
 
+  namespace :apachify do
+
+    desc "install apache site configuration file"
+      task :setup do
+        on roles(:web) do
+          # Must occur after code is deployed and symlink to current is created
+          # If the site config file does not yet exist, then copy it over with replacements
+          if !test("[ -f /etc/apache2/sites-available/concerto.conf ]")
+            as :root do
+              execute :cp, "#{current_path}/concerto.conf", "/etc/apache2/sites-available/concerto.conf"
+              execute :sed, "-i", "'s/usr\/share\/concerto/#{current_path}/g'", "/etc/apache2/sites-available/concerto.conf"
+              execute :chmod, "+r", "/etc/apache2/sites-available/concerto.conf"
+              execute :chmod, "o-w", "/etc/apache2/sites-available/concerto.conf"
+              execute "a2ensite", "concerto"
+              execute "sysctl", "apache2", "reload"
+            end
+          end
+        end
+      end
+    end
+
+  end
+
   namespace :services do
 
     # start, stop, or restart the services if the service control script exists
@@ -169,5 +192,6 @@ end
 before "deploy:services:remove", "deploy:services:stop"   # stop the service before we remove it
 before "deploy:updating", "deploy:services:stop"      # stop the service before we update the code
 after "deploy:restart", "deploy:services:setup"  # reinstall/reset perms on service after code changes
+after "deploy:restart", "deploy:apachify:setup"  # write apache site config file for concerto
 after "deploy:services:setup", "deploy:services:start"    # restart the service after its been set up
 after "deploy:starting", "deploy:services:defaults" # set defaults for the service when we set up a new server
