@@ -104,11 +104,11 @@ namespace :deploy do
         if !test("[ -f /etc/apache2/sites-available/concerto.conf ]")
           as :root do
             execute :cp, "#{current_path}/concerto.conf", "/etc/apache2/sites-available/concerto.conf"
-            execute :sed, "-i", "'s/usr\/share\/concerto/#{current_path}/g'", "/etc/apache2/sites-available/concerto.conf"
+            execute :sed, "-i", "'s%/usr/share/concerto/%#{current_path}/%g'", "/etc/apache2/sites-available/concerto.conf"
             execute :chmod, "+r", "/etc/apache2/sites-available/concerto.conf"
             execute :chmod, "o-w", "/etc/apache2/sites-available/concerto.conf"
             execute "a2ensite", "concerto"
-            execute "sysctl", "apache2", "reload"
+            execute "service", "apache2", "reload"
           end
         end
       end
