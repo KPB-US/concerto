@@ -94,3 +94,15 @@ gem 'font-awesome-sass'
 
 # Web console
 gem 'web-console', '~> 2.0', group: :development
+
+# enable deploy via capistrano
+group :development do
+  gem 'capistrano'
+  gem 'capistrano-bundler'
+  gem 'capistrano-clockwork'
+  gem 'capistrano-foreman'
+  gem 'capistrano-passenger'
+  gem 'capistrano-rails'
+  gem 'capistrano-rvm'
+  gem 'capistrano3-delayed-job'
+end

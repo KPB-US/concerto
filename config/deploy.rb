@@ -25,7 +25,7 @@
 # deploy ALL=(ALL) NOPASSWD:/usr/bin/unlink, /usr/sbin/update-rc.d, /usr/bin/whoami, /usr/bin/env, /bin/sh, /usr/bin/passenger-config
 
 # config valid only for current version of Capistrano
-lock '3.4.0'
+lock '3.7.2'
 
 set :stage,       :production
 set :application, 'concerto'
@@ -98,7 +98,7 @@ namespace :deploy do
     %w[start stop restart].each do |command|
       desc "#{command} concerto background services"
       task command.to_sym do
-        on roles(:app) do 
+        on roles(:app) do
           if test("[ -L /etc/init.d/concerto ]")
             as :root do
               execute "invoke-rc.d", "concerto", "#{command}"
@@ -110,24 +110,24 @@ namespace :deploy do
 
     desc "install concerto background services"
     task :setup do
-      on roles(:app) do 
+      on roles(:app) do
         # Must occur after code is deployed and symlink to current is created
         # If the service control script does not yet exist, but the script is in our app directory
         # then we link it (to create the service control script) and make sure it's executable
-        # and not world-writable.  
+        # and not world-writable.
         # Otherwise if the service control script already exists, then the script in the app directory
         # may have just been replaced, so make sure it's permissions are like we said.
         if !test("[ -L /etc/init.d/concerto ]") and test("[ -f #{current_path}/concerto-init.d ]")
           as :root do
             execute :ln, "-nfs", "#{current_path}/concerto-init.d", "/etc/init.d/concerto"
             execute :chmod, "+x", "#{current_path}/concerto-init.d"
-            execute :chmod, "o-w", "#{current_path}/concerto-init.d" 
+            execute :chmod, "o-w", "#{current_path}/concerto-init.d"
             execute "update-rc.d", "concerto", "defaults"
           end
         elsif test("[ -f #{current_path}/concerto-init.d ]")
           as :root do
             execute :chmod, "+x", "#{current_path}/concerto-init.d"
-            execute :chmod, "o-w", "#{current_path}/concerto-init.d" 
+            execute :chmod, "o-w", "#{current_path}/concerto-init.d"
           end
         end
       end
@@ -135,7 +135,7 @@ namespace :deploy do
 
     desc "set default directory for concerto background services"
     task :defaults do
-      on roles(:app) do 
+      on roles(:app) do
         if !test("[ -f /etc/default/concerto ]")
           as :root do
             # set the path for finding our app
@@ -150,7 +150,7 @@ namespace :deploy do
 
     desc "remove concerto background services"
     task :remove do
-      on roles(:app) do 
+      on roles(:app) do
         # if the service control script exists, then remove it and unschedule it
         if test("[ -L /etc/init.d/concerto ]")
           as :root do
