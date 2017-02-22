@@ -16,16 +16,12 @@ require 'capistrano/deploy'
 #   https://github.com/capistrano/passenger
 #
 require 'capistrano/rvm'
-# require 'capistrano/rbenv'
-# require 'capistrano/chruby'
 require 'capistrano/bundler'
 require 'capistrano/rails'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
 require 'capistrano/passenger'
-require "capistrano/scm/git"
-# require 'capistrano/delayed_job'
-# require 'capistrano/clockwork'
+require 'capistrano/scm/git'
 
 install_plugin Capistrano::SCM::Git
 
