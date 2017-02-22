@@ -29,7 +29,7 @@ lock '3.7.2'
 
 set :stage,       :production
 set :application, 'concerto'
-set :repo_url,    'https://github.com/concerto/concerto.git'
+set :repo_url,    'https://github.com/KPB-US/concerto.git'
 set :user,        'deploy'
 
 # uncomment this if you are deploying to a sub-uri

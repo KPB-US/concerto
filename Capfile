@@ -24,7 +24,7 @@ require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
 require 'capistrano/passenger'
 require "capistrano/scm/git"
-require 'capistrano/delayed_job'
+# require 'capistrano/delayed_job'
 # require 'capistrano/clockwork'
 
 install_plugin Capistrano::SCM::Git
