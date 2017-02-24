@@ -95,7 +95,8 @@ class Content < ActiveRecord::Base
     if _start_time.kind_of?(Hash)
       return if _start_time[:date].empty?
       # convert entered time to local time in the server's time zone
-      t = DateTime.strptime("#{_start_time[:date]} #{_start_time[:time]}", "%m/%d/%Y %l:%M %p")
+      # t = DateTime.strptime("#{_start_time[:date]} #{_start_time[:time]}", "%m/%d/%Y %l:%M %p")
+      t = DateTime.strptime("#{_start_time[:date]} #{_start_time[:time]}", "#{I18n.t('time.formats.date_long_year')} %l:%M %p")
       write_attribute(:start_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)))
     else
       write_attribute(:start_time, _start_time)
@@ -107,7 +108,7 @@ class Content < ActiveRecord::Base
     if _end_time.kind_of?(Hash)
       return if _end_time[:date].empty?
       # convert entered time to local time in the server's time zone
-      t = DateTime.strptime("#{_end_time[:date]} #{_end_time[:time]}", "%m/%d/%Y %l:%M %p")
+      t = DateTime.strptime("#{_end_time[:date]} #{_end_time[:time]}", "#{I18n.t('time.formats.date_long_year')} %l:%M %p")
       write_attribute(:end_time, Time.zone.parse(Time.iso8601(t.to_s).to_s(:db)))
     else
       write_attribute(:end_time, _end_time)
