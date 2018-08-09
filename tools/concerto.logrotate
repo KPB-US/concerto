@@ -1,0 +1,9 @@
+/usr/share/concerto/log/*.log {
+	create www-data www-data
+	su www-data www-data
+	missingok
+	compress
+	daily
+	dateext
+	rotate 14
+}

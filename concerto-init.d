@@ -10,7 +10,7 @@
 ### END INIT INFO
 
 #CONCERTO USERS: SET THESE DEFAULTS ACCORDING TO YOUR SYSTEM CONFIGURATION
-USERNAME=www-data
+USERNAME=concerto
 CONCERTODIR=/usr/share/concerto
 RAILS_ENVIRONMENT=production
 
@@ -64,7 +64,7 @@ do_start()
         if [ $RUNNING -eq 0 ]; then
           log_daemon_msg "$DAEMON_DESC already running"
         else
-          su --login $USERNAME --shell=$SUSHELL -c "cd $CONCERTODIR; export PORT=5000; RAILS_ENV=$RAILS_ENVIRONMENT bundle exec clockwork lib/cron.rb >> /var/log/concerto/clock-1.log 2>&1 & echo \$!" > $PIDDIR/clock.1.pid
+          sudo -u $USERNAME --login $SUSHELL -c "cd $CONCERTODIR; export PORT=5000; RAILS_ENV=$RAILS_ENVIRONMENT bundle exec clockwork lib/cron.rb >> /var/log/concerto/clock-1.log 2>&1 & echo \$!" > $PIDDIR/clock.1.pid
         fi
 
 
@@ -78,7 +78,7 @@ do_start()
         if [ $RUNNING -eq 0 ]; then
           log_daemon_msg "$WORKER_DESC already running"
         else
-          su --login $USERNAME --shell=$SUSHELL -c "cd $CONCERTODIR; export PORT=5100; RAILS_ENV=$RAILS_ENVIRONMENT bundle exec rake jobs:work >> /var/log/concerto/worker-1.log 2>&1 & echo \$!" > $PIDDIR/worker.1.pid
+          sudo -u $USERNAME --login $SUSHELL -c "cd $CONCERTODIR; export PORT=5100; RAILS_ENV=$RAILS_ENVIRONMENT bundle exec rake jobs:work >> /var/log/concerto/worker-1.log 2>&1 & echo \$!" > $PIDDIR/worker.1.pid
         fi
 
 }
